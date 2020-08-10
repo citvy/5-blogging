@@ -7,7 +7,7 @@ const { exec } = require('child_process');
 const api = new GhostAdminAPI({
     url: 'https://citvy.com/blog',
     version: "v3",
-    key: '5f2db99a83ab0a6070a6ba54:b2bec117c1e36d0a4341d8fa719ced3c8b96f72686404765ee4060cbf9b6d0a5'
+    key: '<KEY>'
 });
 
 async function autoScroll(page) {
