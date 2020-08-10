@@ -26,7 +26,7 @@ function getNode(node, tagToRetrieve) {
 axios.get('https://news.google.com/rss/search?q=real+estate+trends+when:1d&hl=en-US&gl=US&ceid=US:en').then((resp) => {
     let links = [];
     parseData(resp.data).map((elem, index) => {
-        if (elem.link.indexOf('marketresearchposts.com' || 'reportlinker.com') == -1)
+        if (elem.link.indexOf('marketresearchposts.com') == -1 && link.indexOf('reportlinker.com') == -1 && link.indexOf('jdsupra.com') == -1)
             links.push(elem.link);
     });
     console.log(links.length)
