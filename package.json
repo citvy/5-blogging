@@ -14,8 +14,10 @@
     "axios": "^0.19.2",
     "child_process": "^1.0.2",
     "free-google-translate-with-puppeteer": "^1.0.0",
+    "html-google-translate": "^1.0.12",
     "jsdom": "^16.3.0",
     "lodash": "^4.17.19",
+    "node-fetch": "^2.6.0",
     "puppeteer": "^5.2.1",
     "request": "^2.88.2",
     "shelljs": "^0.8.4"
