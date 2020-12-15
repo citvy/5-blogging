@@ -36,6 +36,8 @@ function rss() {
             }
         });
         console.log(links.length)
+        if(links.length < 1)
+            throw 'fuck those 0 links';
         fs.writeFile('links.txt', JSON.stringify(links), function (err) {
             if (err) return console.log(err);
             console.log('Links [] > links.txt');
