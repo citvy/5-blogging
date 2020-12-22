@@ -2,6 +2,7 @@ const axios = require('axios');
 const _ = require('lodash');
 const jsdom = require("jsdom");
 const fs = require('fs');
+require('dotenv').config();
 
 function rss() {
     function parseData(data) {
@@ -24,7 +25,7 @@ function rss() {
         return _.unescape(htmlData);
     }
 
-    axios.get('https://news.google.com/rss/search?q=real+estate+tips+when:1d&hl=en-US&gl=US&ceid=US:en').then((resp) => {
+    axios.get(`https://news.google.com/rss/search?q=real+estate+tips+when:${process.env.TIME_DELAY}h&hl=en-US&gl=US&ceid=US:en`).then((resp) => {
         let links = [];
         parseData(resp.data).map((elem, index) => {
             console.log(elem);
