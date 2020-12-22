@@ -27,6 +27,7 @@ function rss() {
 
     axios.get(`https://news.google.com/rss/search?q=real+estate+tips+when:${process.env.TIME_DELAY}h&hl=en-US&gl=US&ceid=US:en`).then((resp) => {
         let links = [];
+        // console.log(resp);
         parseData(resp.data).map((elem, index) => {
             console.log(elem);
             if ((elem.link.indexOf('market') == -1) && (elem.link.indexOf('report') == -1) && (elem.link.indexOf('industry') == -1)) {
@@ -37,7 +38,7 @@ function rss() {
             }
         });
         console.log(links.length)
-        if(links.length < 1)
+        if(!links || links.length < 1)
             throw 'fuck those 0 links';
         fs.writeFile('links.txt', JSON.stringify(links), function (err) {
             if (err) return console.log(err);

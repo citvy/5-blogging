@@ -215,6 +215,9 @@ function ghostly() {
                                     )
                                     .then(async res => {
                                         process.env.TESTMODE ? false : await browser.close()
+                                        setTimeout(function () {
+                                            process.exit(0);
+                                        }, 60 * 60 * 1000 * process.env.TIME_DELAY);
                                     })
                                     .catch(err => console.log(err));
                             })
