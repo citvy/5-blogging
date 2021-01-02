@@ -14,14 +14,14 @@ const api = new GhostAdminAPI({
 });
 
 function ghostly() {
-    let text = JSON.parse(fs.readFileSync('links.txt', 'utf8'));
+    let text = JSON.parse(fs.readFileSync('links.json', 'utf8'));
     let url = text.shift();
     if (url) {
         fs.appendFile('newlinks.txt', JSON.stringify(url), function (err) {
             if (err) return console.log(err);
         });
 
-        fs.writeFile('links.txt', JSON.stringify(text), function (err) {
+        fs.writeFile('links.json', JSON.stringify(text), function (err) {
             if (err) return console.log(err);
         });
 
@@ -34,10 +34,10 @@ function ghostly() {
             // let articleFile = makeid(64);
             fs.writeFile(`article/index.html`, result.content, function (err) {
                 if (err) return console.log(err);
-                // console.log('Removed 1 link > links.txt');
+                // console.log('Removed 1 link > links.json');
                 fs.writeFile(`article/index.txt`, JSON.stringify(objR), function (err) {
                     if (err) return console.log(err);
-                    // console.log('Removed 1 link > links.txt');
+                    // console.log('Removed 1 link > links.json');
                 });
             });
 

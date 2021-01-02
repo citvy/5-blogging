@@ -32,7 +32,7 @@ async function autoScroll(page) {
 }
 
 function ghostly() {
-    let text = JSON.parse(fs.readFileSync('links.txt', 'utf8'));
+    let text = JSON.parse(fs.readFileSync('links.json', 'utf8'));
     let url = text.shift();
 
     if (url) {
@@ -40,7 +40,7 @@ function ghostly() {
             if (err) return console.log(err);
         });
 
-        fs.writeFile('links.txt', JSON.stringify(text), function (err) {
+        fs.writeFile('links.json', JSON.stringify(text), function (err) {
             if (err) return console.log(err);
         });
 
@@ -55,7 +55,7 @@ function ghostly() {
                 excerpt: result.excerpt
             }
             console.log('result.lead_image_url', result.lead_image_url);
-            // let articleFile = makeid(64);
+
             fs.writeFile(`article/index.html`, result.content + `<div id="google_translate_element"></div>
 
             <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -68,10 +68,10 @@ function ghostly() {
             a.dispatchEvent(new Event('change'));
             </script>`, function (err) {
                 if (err) return console.log(err);
-                // console.log('Removed 1 link > links.txt');
+                // console.log('Removed 1 link > links.json');
                 fs.writeFile(`article/index.txt`, JSON.stringify(objR), function (err) {
                     if (err) return console.log(err);
-                    console.log('Removed 1 link > links.txt');
+                    console.log('Removed 1 link > links.json');
                     (async () => {
                         const browser = await puppeteer.launch({ ignoreDefaultArgs: true, headless: process.env.TESTMODE ? false : true, args: ['--no-sandbox', '--lang=ru-RU, ru', '--disable-web-security', 'ignoreDefaultArgs'] });
 
@@ -99,6 +99,8 @@ function ghostly() {
                         // await page.goto(`https://translate.google.com/translate?depth=5&pto=aue&rurl=translate.google.com&sl=en&sp=nmt4&tl=ru&u=https://citvy.github.io/50pages/${articleFile}.html`);
                         await page.goto(`file:///Users/rostyslav/Desktop/merc-parser/article/index.html#googtrans(en|ru)`);
                         await page.waitFor(4000);
+
+                        await autoScroll(page);
                         let bodyHTML = await page.evaluate(() => {
                             function stripScripts(s) {
                                 var div = document.createElement('div');
@@ -215,9 +217,6 @@ function ghostly() {
                                     )
                                     .then(async res => {
                                         process.env.TESTMODE ? false : await browser.close()
-                                        setTimeout(function () {
-                                            process.exit(0);
-                                        }, 60 * 60 * 1000 * process.env.TIME_DELAY);
                                     })
                                     .catch(err => console.log(err));
                             })

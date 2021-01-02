@@ -4,7 +4,7 @@ const jsdom = require("jsdom");
 const fs = require('fs');
 require('dotenv').config();
 
-function rss() {
+async function rss() {
     function parseData(data) {
         parser = new new jsdom.JSDOM().window.DOMParser;
         var xmlDoc = parser.parseFromString(data, "text/xml");
@@ -25,26 +25,24 @@ function rss() {
         return _.unescape(htmlData);
     }
 
-    axios.get(`https://news.google.com/rss/search?q=real+estate+tips+when:${process.env.TIME_DELAY}h&hl=en-US&gl=US&ceid=US:en`).then((resp) => {
-        let links = [];
-        // console.log(resp);
-        parseData(resp.data).map((elem, index) => {
-            console.log(elem);
-            if ((elem.link.indexOf('market') == -1) && (elem.link.indexOf('report') == -1) && (elem.link.indexOf('industry') == -1)) {
-                links.push(elem.link);
-            }
-            else {
-                console.log('dropped', elem.link);
-            }
-        });
-        console.log(links.length)
-        if(!links || links.length < 1)
-            throw 'fuck those 0 links';
-        fs.writeFile('links.txt', JSON.stringify(links), function (err) {
-            if (err) return console.log(err);
-            console.log('Links [] > links.txt');
-        });
+    const resp = await axios.get(`https://news.google.com/rss/search?q=real+estate+tips+when:${process.env.TIME_DELAY}h&hl=en-US&gl=US&ceid=US:en`);
+    let links = [];
+
+    parseData(resp.data).map((elem, index) => {
+        if ((elem.link.indexOf('market') == -1) && (elem.link.indexOf('report') == -1) && (elem.link.indexOf('industry') == -1) && (elem.link.indexOf('www.desmoinesregister.com') == -1)) {
+            links.push(elem.link);
+        }
+        else {
+            console.log('dropped', elem.link);
+        }
     });
+    if (!links || links.length < 1)
+        throw 'fuck those 0 links';
+    fs.writeFile('links.json', JSON.stringify(links), function (err) {
+        if (err) return console.log(err);
+        console.log('Links [] > links.json');
+    });
+    return links.length; // return number of links
 }
 
 module.exports = rss;
